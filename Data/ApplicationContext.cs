@@ -20,7 +20,12 @@ namespace CursoEFCore.Data
             optionsBuilder
                 .UseLoggerFactory(_logger)
                 .EnableSensitiveDataLogging()
-                .UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=CursoEFCore;Trusted_Connection=True;");
+                .UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=CursoEFCore;Trusted_Connection=True;",
+                p => p.EnableRetryOnFailure(
+                    maxRetryCount: 5,
+                    maxRetryDelay: TimeSpan.FromSeconds(30),
+                    errorNumbersToAdd: null
+                    ).MigrationsHistoryTable("MigrationsHistory"));
         }
 
         protected void MaparPropriedadesEsquecidas(ModelBuilder modelBuilder)
